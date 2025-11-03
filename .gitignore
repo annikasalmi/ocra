@@ -1,0 +1,20 @@
+# Figures and generated outputs
+*.png
+*.pdf
+*.svg
+
+# Figure CSV tables
+fig*.csv
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+ocra/
+
+# OS files
+.DS_Store
+
