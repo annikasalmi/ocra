@@ -10,10 +10,11 @@
 
 # Import ocra
 from ocra import *
+from ph import PH
 
 # Plot ocean pH as a function of PCO2
 ## DIV decides the carbonate system: Ca, Mg or Fe
-pH_PCO2(DIV='Ca') 
+PH(DIV='Ca').pH_PCO2()
 
 # Plot Ca-CCD as a function of PCO2 and T
 ## nSiO2 = 1 includes silica and 0 excludes silica

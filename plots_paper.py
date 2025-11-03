@@ -10,6 +10,7 @@
 
 # Import ocra
 from ocra import *
+from ocra import PH
 
 
 ## Ocean pH figures
@@ -17,22 +18,22 @@ from ocra import *
 ### DIV decides the carbonate system: Ca, Mg or Fe
 
 # Plot ocean pH as a function of PCO2 for the Ca-system
-pH_PCO2(DIV='Ca')
+PH(DIV='Ca').pH_PCO2()
 
 # Plot ocean pH as a function of PCO2 for the Mg-system
-pH_PCO2(DIV='Mg')
+PH(DIV='Mg').pH_PCO2()
 
 # Plot ocean pH as a function of PCO2 for the Fe-system
-pH_PCO2(DIV='Fe')
+PH(DIV='Fe').pH_PCO2()
 
 # Plot numerical and analytical solutions of ocean pH
-pH_PCO2_an()
+PH().pH_PCO2_an()
 
 # Plot ocean pH as a function of P
-pH_P()
+PH().pH_P()
 
 # Plot ocean pH as a function of T
-pH_T()
+PH().pH_T()
 
 
 ## CCD figures
