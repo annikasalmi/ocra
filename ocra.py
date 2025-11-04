@@ -36,30 +36,19 @@ def CaCCD_PCO2_T(beta = 0.3, nSiO2 = 1, nDIV = 1, totnum = 10, numQ1 = 10, numQ2
     
     system, specs, solver = setup_Ca()
                 
-    for k in range(len(Temps)):
-        Temp = Temps[k] 
+    for k, Temp in enumerate(Temps):
 
-        for i in range(len(PCO2s)):
-            PCO2 = PCO2s[i]
-
+        for i, PCO2 in enumerate(PCO2s):
             addDIVtot = nDIV * weath_scaling(PCO2, Temp, beta=beta) / numden
-
             addSiO2 = nSiO2 * addDIVtot
-
             j = 0
             while j < totnum:
-
                 totP = totPs[j]
-
                 state = solve_Ca(system, specs, solver, addDIVtot, addSiO2, PCO2, Temp, totP)
-                
                 chems3 = save_chems3_Ca(state, PCO2, chems3, i, j, k)
-
                 j = j + 1
 
-    ####################################
-
-    for k in range(len(Temps)):
+    for k, _ in enumerate(Temps):
         for i in range(len(PCO2s)):
             nCarb_surf = chems3['Calcite'][k][i][0]
             if nCarb_surf < low_cutoff:
@@ -100,28 +89,16 @@ def MgCCD_PCO2_T(beta = 0.3, nSiO2 = 1, nDIV = 1, totnum = 10, numQ1 = 10, numQ2
     
     system, specs, solver = setup_Mg()
                 
-    for k in range(len(Temps)):
-        Temp = Temps[k] 
-
-        for i in range(len(PCO2s)):
-            PCO2 = PCO2s[i]
-
+    for k, Temp in enumerate(Temps):
+        for i, PCO2 in enumerate(PCO2s):
             addDIVtot = nDIV * weath_scaling(PCO2, Temp, beta=beta) / numden
-
             addSiO2 = nSiO2 * addDIVtot
-
             j = 0
             while j < totnum:
-
                 totP = totPs[j]
-
-                state = solve_Mg(system, specs, solver, addDIVtot, addSiO2, PCO2, Temp, totP)
-                
+                state = solve_Mg(system, specs, solver, addDIVtot, addSiO2, PCO2, Temp, totP)  
                 chems3 = save_chems3_Mg(state, PCO2, chems3, i, j, k)
-
                 j = j + 1
-
-    ####################################
 
     for k in range(len(Temps)):
         for i in range(len(PCO2s)):
@@ -143,7 +120,6 @@ def MgCCD_PCO2_T(beta = 0.3, nSiO2 = 1, nDIV = 1, totnum = 10, numQ1 = 10, numQ2
         
     return
 
-
 # Calculate Fe-CCD as a function of PCO2 and T
 
 def FeCCD_PCO2_T(beta = 0.3, nSiO2 = 1, nDIV = 1, totnum = 10, numQ1 = 10, numQ2 = 10,
@@ -164,31 +140,19 @@ def FeCCD_PCO2_T(beta = 0.3, nSiO2 = 1, nDIV = 1, totnum = 10, numQ1 = 10, numQ2
     
     system, specs, solver = setup_Fe()
                 
-    for k in range(len(Temps)):
-        Temp = Temps[k] 
-
-        for i in range(len(PCO2s)):
-            PCO2 = PCO2s[i]
-
+    for k, Temp in enumerate(Temps):
+        for i, PCO2 in enumerate(PCO2s):
             addDIVtot = nDIV * weath_scaling(PCO2, Temp, beta=beta) / numden
-
             addSiO2 = nSiO2 * addDIVtot
-
             j = 0
             while j < totnum:
-
                 totP = totPs[j]
-
                 state = solve_Fe(system, specs, solver, addDIVtot, addSiO2, PCO2, Temp, totP)
-                
                 chems3 = save_chems3_Fe(state, PCO2, chems3, i, j, k)
-
                 j = j + 1
 
-    ####################################
-
-    for k in range(len(Temps)):
-        for i in range(len(PCO2s)):
+    for k, _ in enumerate(Temps):
+        for i, _ in enumerate(PCO2s):
             nCarb_surf = chems3['Siderite'][k][i][0]
             if nCarb_surf < low_cutoff:
                 CCDs[k][i] = 1e-3 # 0 # km
@@ -220,8 +184,6 @@ def phases_PCO2 (DIV = 'Ca', Temp = 298, totP = 1, beta = 0.3, nDIV = 1, nSiO2 =
     
     PCO2s = np.logspace(-8, -0.5, num=totnum) # bar
     chems1 = chem_dict1(totnum)
-
-    ####################################
     
     if DIV == 'Ca':
         
@@ -229,16 +191,11 @@ def phases_PCO2 (DIV = 'Ca', Temp = 298, totP = 1, beta = 0.3, nDIV = 1, nSiO2 =
 
         j = 0
         while j < totnum:
-
             PCO2 = PCO2s[j]
-            
             addDIVtot = nDIV * weath_scaling(PCO2,Temp,beta=beta) / numden
             addSiO2 = nSiO2 * addDIVtot
-
-            state = solve_Ca(system, specs, solver, addDIVtot, addSiO2, PCO2, Temp, totP)
-                
+            state = solve_Ca(system, specs, solver, addDIVtot, addSiO2, PCO2, Temp, totP)  
             chems1 = save_chems1_Ca(state, PCO2, chems1, j)
-
             j = j + 1
     
         df = pd.DataFrame({
@@ -250,7 +207,6 @@ def phases_PCO2 (DIV = 'Ca', Temp = 298, totP = 1, beta = 0.3, nDIV = 1, nSiO2 =
         output_phases_PCO2(df, DIV = DIV, beta = beta, nDIV = nDIV, nSiO2 = nSiO2,
                            table_flag = table_flag, plot_flag = plot_flag)
         
-    ####################################
     
     elif DIV == 'Mg':
         
@@ -258,16 +214,11 @@ def phases_PCO2 (DIV = 'Ca', Temp = 298, totP = 1, beta = 0.3, nDIV = 1, nSiO2 =
 
         j = 0
         while j < totnum:
-
             PCO2 = PCO2s[j]
-            
             addDIVtot = nDIV * weath_scaling(PCO2,Temp,beta=beta) / numden
             addSiO2 = nSiO2 * addDIVtot
-
             state = solve_Mg(system, specs, solver, addDIVtot, addSiO2, PCO2, Temp, totP)
-                
             chems1 = save_chems1_Mg(state, PCO2, chems1, j)
-
             j = j + 1
 
         df = pd.DataFrame({
@@ -279,24 +230,17 @@ def phases_PCO2 (DIV = 'Ca', Temp = 298, totP = 1, beta = 0.3, nDIV = 1, nSiO2 =
         output_phases_PCO2(df, DIV = DIV, beta = beta, nDIV = nDIV, nSiO2 = nSiO2,
                            table_flag = table_flag, plot_flag = plot_flag)
     
-    ####################################
-    
     elif DIV == 'Fe':
         
         system, specs, solver = setup_Fe()
 
         j = 0
         while j < totnum:
-
             PCO2 = PCO2s[j]
-            
             addDIVtot = nDIV * weath_scaling(PCO2,Temp,beta=beta) / numden
             addSiO2 = nSiO2 * addDIVtot
-
-            state = solve_Fe(system, specs, solver, addDIVtot, addSiO2, PCO2, Temp, totP)
-                
+            state = solve_Fe(system, specs, solver, addDIVtot, addSiO2, PCO2, Temp, totP) 
             chems1 = save_chems1_Fe(state, PCO2, chems1, j)
-
             j = j + 1
 
         df = pd.DataFrame({
