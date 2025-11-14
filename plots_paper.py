@@ -10,7 +10,7 @@
 
 # Import ocra
 from ocra import *
-from ocra import PH
+from ph import PH
 
 
 ## Ocean pH figures

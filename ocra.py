@@ -13,22 +13,32 @@
 import numpy as np
 import pandas as pd
 
+from inputs import CCD_DEFAULTS, PHASE_DEFAULTS, GRID_DEFAULTS
 from store import *
 from solve import *
+from output import *
 
 # Calculate Ca-CCD as a function of PCO2 and T
 
-def CaCCD_PCO2_T(beta = 0.3, nSiO2 = 1, nDIV = 1, totnum = 10, numQ1 = 10, numQ2 = 10,
-                plot_flag = True, table_flag = True):
+def CaCCD_PCO2_T(
+    beta = CCD_DEFAULTS["beta"],
+    nSiO2 = CCD_DEFAULTS["nSiO2"],
+    nDIV = CCD_DEFAULTS["nDIV"],
+    totnum = CCD_DEFAULTS["totnum"],
+    numQ1 = CCD_DEFAULTS["numQ1"],
+    numQ2 = CCD_DEFAULTS["numQ2"],
+    plot_flag = CCD_DEFAULTS["plot_flag"],
+    table_flag = CCD_DEFAULTS["table_flag"],
+):
     '''
     Returns Ca-CCD [km] as a function of PCO2 [bar] and Temp [K]
     '''
     if totnum > 10:
         print('Please be patient. A high-resolution figure is being generated.')
         
-    Temps = np.linspace(273.16, 372.16, num=numQ1) # Temperature in K
-    PCO2s = np.logspace(-8, -0.5, num=numQ2) # surface CO2 pressure in bar
-    totPs = np.logspace(0, np.log10(5000), num=totnum)
+    Temps = GRID_DEFAULTS["temps"](numQ1) # Temperature in K
+    PCO2s = GRID_DEFAULTS["pco2s"](numQ2) # surface CO2 pressure in bar
+    totPs = GRID_DEFAULTS["totps"](totnum)
 
     chems3 = chem_dict3(numQ1, numQ2, totnum)
 
@@ -71,17 +81,25 @@ def CaCCD_PCO2_T(beta = 0.3, nSiO2 = 1, nDIV = 1, totnum = 10, numQ1 = 10, numQ2
 
 # Calculate Mg-CCD as a function of PCO2 and T
 
-def MgCCD_PCO2_T(beta = 0.3, nSiO2 = 1, nDIV = 1, totnum = 10, numQ1 = 10, numQ2 = 10,
-                plot_flag = True, table_flag = True):
+def MgCCD_PCO2_T(
+    beta = CCD_DEFAULTS["beta"],
+    nSiO2 = CCD_DEFAULTS["nSiO2"],
+    nDIV = CCD_DEFAULTS["nDIV"],
+    totnum = CCD_DEFAULTS["totnum"],
+    numQ1 = CCD_DEFAULTS["numQ1"],
+    numQ2 = CCD_DEFAULTS["numQ2"],
+    plot_flag = CCD_DEFAULTS["plot_flag"],
+    table_flag = CCD_DEFAULTS["table_flag"],
+):
     '''
     Returns Mg-CCD [km] as a function of PCO2 [bar] and Temp [K]
     '''
     if totnum > 10:
         print('Please be patient. A high-resolution figure is being generated.')
         
-    Temps = np.linspace(273.16, 372.16, num=numQ1) # Temperature in K
-    PCO2s = np.logspace(-8, -0.5, num=numQ2) # surface CO2 pressure in bar
-    totPs = np.logspace(0, np.log10(5000), num=totnum)
+    Temps = GRID_DEFAULTS["temps"](numQ1) # Temperature in K
+    PCO2s = GRID_DEFAULTS["pco2s"](numQ2) # surface CO2 pressure in bar
+    totPs = GRID_DEFAULTS["totps"](totnum)
 
     chems3 = chem_dict3(numQ1, numQ2, totnum)
 
@@ -122,17 +140,25 @@ def MgCCD_PCO2_T(beta = 0.3, nSiO2 = 1, nDIV = 1, totnum = 10, numQ1 = 10, numQ2
 
 # Calculate Fe-CCD as a function of PCO2 and T
 
-def FeCCD_PCO2_T(beta = 0.3, nSiO2 = 1, nDIV = 1, totnum = 10, numQ1 = 10, numQ2 = 10,
-                plot_flag = True, table_flag = True):
+def FeCCD_PCO2_T(
+    beta = CCD_DEFAULTS["beta"],
+    nSiO2 = CCD_DEFAULTS["nSiO2"],
+    nDIV = CCD_DEFAULTS["nDIV"],
+    totnum = CCD_DEFAULTS["totnum"],
+    numQ1 = CCD_DEFAULTS["numQ1"],
+    numQ2 = CCD_DEFAULTS["numQ2"],
+    plot_flag = CCD_DEFAULTS["plot_flag"],
+    table_flag = CCD_DEFAULTS["table_flag"],
+):
     '''
     Returns Fe-CCD [km] as a function of PCO2 [bar] and Temp [K]
     '''
     if totnum > 10:
         print('Please be patient. A high-resolution figure is being generated.')
         
-    Temps = np.linspace(273.16, 372.16, num=numQ1) # Temperature in K
-    PCO2s = np.logspace(-8, -0.5, num=numQ2) # surface CO2 pressure in bar
-    totPs = np.logspace(0, np.log10(5000), num=totnum)
+    Temps = GRID_DEFAULTS["temps"](numQ1) # Temperature in K
+    PCO2s = GRID_DEFAULTS["pco2s"](numQ2) # surface CO2 pressure in bar
+    totPs = GRID_DEFAULTS["totps"](totnum)
 
     chems3 = chem_dict3(numQ1, numQ2, totnum)
 
@@ -174,15 +200,24 @@ def FeCCD_PCO2_T(beta = 0.3, nSiO2 = 1, nDIV = 1, totnum = 10, numQ1 = 10, numQ2
 
 # Calculate stable phases as a function of PCO2
 
-def phases_PCO2 (DIV = 'Ca', Temp = 298, totP = 1, beta = 0.3, nDIV = 1, nSiO2 = 1, totnum = 100,
-                table_flag = True, plot_flag = True):
+def phases_PCO2(
+    DIV = PHASE_DEFAULTS["DIV"],
+    Temp = PHASE_DEFAULTS["Temp"],
+    totP = 1,
+    beta = PHASE_DEFAULTS["beta"],
+    nDIV = CCD_DEFAULTS["nDIV"],
+    nSiO2 = PHASE_DEFAULTS["nSiO2"],
+    totnum = PHASE_DEFAULTS["totnum"],
+    table_flag = PHASE_DEFAULTS["table_flag"],
+    plot_flag = PHASE_DEFAULTS["plot_flag"],
+):
     '''
     Returns stable phases as a function of PCO2 [bar]
     '''  
     if DIV != 'Ca' and DIV != 'Mg' and DIV != 'Fe':
         print('Error: Enter DIV = "Ca" or "Mg" or "Fe"')
     
-    PCO2s = np.logspace(-8, -0.5, num=totnum) # bar
+    PCO2s = GRID_DEFAULTS["pco2s"](totnum) # bar
     chems1 = chem_dict1(totnum)
     
     if DIV == 'Ca':

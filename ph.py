@@ -4,14 +4,26 @@
 import numpy as np
 from pandas.core.frame import AnyArrayLike
 
+from inputs import PH_DEFAULTS, GRID_DEFAULTS
 from store import *
 from solve import *
 from output import *
 
 
 class PH:
-    def __init__(self, DIV = 'Ca', totP = 1, Temp = 288, nDIV = 1, nSiO2 = 1, totnum = 100,
-                 plot_flag = True, table_flag = True, analytical_flag = False, comparison = 'PCO2'):
+    def __init__(
+        self,
+        DIV = PH_DEFAULTS["DIV"],
+        totP = PH_DEFAULTS["totP"],
+        Temp = PH_DEFAULTS["Temp"],
+        nDIV = PH_DEFAULTS["nDIV"],
+        nSiO2 = PH_DEFAULTS["nSiO2"],
+        totnum = PH_DEFAULTS["totnum"],
+        plot_flag = PH_DEFAULTS["plot_flag"],
+        table_flag = PH_DEFAULTS["table_flag"],
+        analytical_flag = PH_DEFAULTS["analytical_flag"],
+        comparison = PH_DEFAULTS["comparison"],
+    ):
                  
         self.DIV = DIV
         if self.DIV != 'Ca' and self.DIV != 'Mg' and self.DIV != 'Fe':
@@ -68,7 +80,7 @@ class PH:
         '''
         Returns ocean pH as a function of PCO2 [bar] for Ca, Mg or Fe carbonate systems
         '''
-        PCO2s = np.logspace(-8, -0.5, num=self.totnum) # bar
+        PCO2s = GRID_DEFAULTS["pco2s"](self.totnum) # bar
 
         if self.DIV == 'Ca':
             chems2 = self._run(PCO2s, setup_Ca, solve_Ca, save_chems2_Ca)
@@ -90,7 +102,7 @@ class PH:
         if self.DIV != 'Ca':
             print('Error: Enter DIV = "Ca"')
 
-        PCO2s = np.logspace(-8, -0.5, num=self.totnum) # bar
+        PCO2s = GRID_DEFAULTS["pco2s"](self.totnum) # bar
         
         if self.DIV == 'Ca': # Almost the same as self._run(), but slight differences for analytical
 
@@ -129,7 +141,7 @@ class PH:
         if self.DIV != 'Ca':
             print('Error: Enter DIV = "Ca"')
 
-        totPs = np.logspace(0, 3, num=self.totnum) # bar
+        totPs = GRID_DEFAULTS["totps"](self.totnum) # bar
 
         ####################################
         
@@ -172,7 +184,7 @@ class PH:
         if self.DIV != 'Ca':
             print('Error: Enter DIV = "Ca"')
 
-        Temps = np.linspace(273.16, 372.16, num=self.totnum) # bar
+        Temps = GRID_DEFAULTS["temps"](self.totnum) # bar
 
         ####################################
         
